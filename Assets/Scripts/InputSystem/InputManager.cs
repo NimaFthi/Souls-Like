@@ -12,6 +12,8 @@ public class InputManager : MonoBehaviour
 
     public Action OnAttackInput;
 
+    public Action OnLockInput;
+
     #endregion
 
     #region Properties
@@ -48,6 +50,8 @@ public class InputManager : MonoBehaviour
         _inputs.Player.Roll.performed += context => HandleDodgeInput();
 
         _inputs.Player.Attack.performed += context => HandleAttackInput();
+
+        _inputs.Player.LockOn.performed += context => HandleLockInput();
     }
 
     private void HandleMoveInput(Vector2 rawInput)
@@ -68,5 +72,10 @@ public class InputManager : MonoBehaviour
     private void HandleAttackInput()
     {
         OnAttackInput?.Invoke();
+    }
+    
+    private void HandleLockInput()
+    {
+        OnLockInput?.Invoke();
     }
 }

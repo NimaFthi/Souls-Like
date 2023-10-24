@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerAttackHandler : MonoBehaviour
 {
-    [Header("Components"), Space] 
+    [Header("Components"), Space]
     [SerializeField] private PlayerData playerData;
+    [SerializeField] private Hitter hitter;
 
     [Header("ComboSystem"), Space] 
     [SerializeField] private List<SO_AttackData> comboData;
@@ -24,12 +25,16 @@ public class PlayerAttackHandler : MonoBehaviour
     private void OnEnable()
     {
         playerData.inputManager.OnAttackInput += HandleAttack;
+        hitter.OnHit += OnHittingEnemy;
     }
 
     private void OnDisable()
     {
         playerData.inputManager.OnAttackInput -= HandleAttack;
+        hitter.OnHit -= OnHittingEnemy;
     }
+
+    #region Attack & Combo
 
     private void HandleAttack()
     {
@@ -101,4 +106,30 @@ public class PlayerAttackHandler : MonoBehaviour
     {
         playerData.playerController.HandleAttackMovement(comboData[index].moveInfo);
     }
+
+    #endregion
+
+    #region Hit
+
+    private void OnHittingEnemy(GameObject hitGO)
+    {
+        //temp code
+        Debug.Log(hitGO.name);
+        var meshRenderer = hitGO.GetComponent<MeshRenderer>();
+        meshRenderer.material.color = Random.ColorHSV();
+    }
+
+    //Animation Event
+    public void ActivateHitterColliders()
+    {
+        hitter.ChangeColliderState(true);
+    }
+
+    //Animation Event
+    public void DeActivateHitterColliders()
+    {
+        hitter.ChangeColliderState(false);
+    }
+
+    #endregion
 }

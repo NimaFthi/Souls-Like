@@ -55,6 +55,15 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""LockOn"",
+                    ""type"": ""Value"",
+                    ""id"": ""97a110e6-40dc-4433-a4db-824add723a7a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Sprint"",
                     ""type"": ""Value"",
                     ""id"": ""6634c6ca-5d66-42e1-8665-084964e4cda0"",
@@ -172,6 +181,17 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b7a711be-7148-419c-bd76-e47352515978"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockOn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -183,6 +203,7 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
         m_Player_Walk = m_Player.FindAction("Walk", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Roll = m_Player.FindAction("Roll", throwIfNotFound: true);
+        m_Player_LockOn = m_Player.FindAction("LockOn", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
     }
@@ -247,6 +268,7 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Walk;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Roll;
+    private readonly InputAction m_Player_LockOn;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Attack;
     public struct PlayerActions
@@ -256,6 +278,7 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
         public InputAction @Walk => m_Wrapper.m_Player_Walk;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Roll => m_Wrapper.m_Player_Roll;
+        public InputAction @LockOn => m_Wrapper.m_Player_LockOn;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -276,6 +299,9 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                 @Roll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
                 @Roll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
                 @Roll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
+                @LockOn.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLockOn;
+                @LockOn.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLockOn;
+                @LockOn.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLockOn;
                 @Sprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
@@ -295,6 +321,9 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                 @Roll.started += instance.OnRoll;
                 @Roll.performed += instance.OnRoll;
                 @Roll.canceled += instance.OnRoll;
+                @LockOn.started += instance.OnLockOn;
+                @LockOn.performed += instance.OnLockOn;
+                @LockOn.canceled += instance.OnLockOn;
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
@@ -310,6 +339,7 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
         void OnWalk(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
+        void OnLockOn(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
     }

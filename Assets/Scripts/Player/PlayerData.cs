@@ -7,4 +7,7 @@ public class PlayerData : MonoBehaviour
     public PlayerController playerController;
     public PlayerAttackHandler playerAttackHandler;
     public PlayerAnimationHandler playerAnimationHandler;
+
+    [Header("States"), Space] 
+    public bool isLockedOn;
 }

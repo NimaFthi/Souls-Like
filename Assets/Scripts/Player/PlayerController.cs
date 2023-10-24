@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
         
         var targetRot = Quaternion.LookRotation(_moveInput);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationLerpFactor);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationLerpFactor * Time.deltaTime);
     }
 
     #endregion
@@ -157,7 +157,16 @@ public class PlayerController : MonoBehaviour
 
     public void HandleAttackMovement(MoveInfo moveInfo)
     {
-        var moveVector = _moveInput.magnitude > 0 ? _moveInput : transform.forward;
+        Vector3 moveVector;
+        if (!playerData.isLockedOn)
+        {
+            moveVector = _moveInput.magnitude > 0 ? _moveInput : transform.forward;
+        }
+        else
+        {
+            moveVector = cameraTransform.forward;
+        }
+        
         StartCoroutine(moveInfo.MoveRoutine(characterController, moveVector, moveVector));
     }
 
