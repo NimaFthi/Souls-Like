@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Cinemachine;
 using Unity.Mathematics;
@@ -9,6 +10,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     [SerializeField] private CinemachineVirtualCamera normalCM;
     [SerializeField] private CinemachineVirtualCamera lockOnCM;
+    [SerializeField] private Camera mainCam;
 
     [Header("FollowSetting"), Space] 
     [SerializeField] private LayerMask layerToSearch;
@@ -24,7 +26,7 @@ public class CameraController : MonoBehaviour
     {
         playerData.inputManager.OnLockInput -= HandleLockOnInput;
     }
-    
+
     private void HandleLockOnInput()
     {
         ChangeCinemachinePriority();
@@ -48,6 +50,7 @@ public class CameraController : MonoBehaviour
 
             lockOnCM.Priority = 1;
             normalCM.Priority = 0;
+
             lockOnCM.LookAt = lockOnTargetTransform;
 
             playerData.isLockedOn = true;
@@ -58,14 +61,32 @@ public class CameraController : MonoBehaviour
     {
         //This is Just For Now, Later We Can Change And Improve This Part
         //Find All Targets In Range
-        var colliders = Physics.OverlapSphere(transform.position,searchRadiusForTarget,layerToSearch);
+        var colliders = Physics.OverlapSphere(transform.position,searchRadiusForTarget,layerToSearch).ToList();
         
-        if(colliders.Length == 0) return;
+        if(colliders.Count == 0) return;
         //Find All Visible Targets
-        var visibleTargets = colliders.ToList().FindAll(x => x.GetComponent<DummyScript>().renderer.isVisible);
+        var cameraPosition = mainCam.transform.position;
+        foreach (var collider in colliders.ToList())
+        {
+            if(IsInCameraView(collider.transform.position) && !IsSomethingInBetween(playerData.transform.position,collider)) continue;
+            colliders.Remove(collider);
+        }
         
-        if(visibleTargets.Count == 0) return;
+        if(colliders.Count == 0) return;
         //Find Nearest Visible In-range Target 
-        lockOnTargetTransform = visibleTargets.OrderBy(x => Vector3.SqrMagnitude(x.transform.position - transform.position)).FirstOrDefault().transform;
+        lockOnTargetTransform = colliders.OrderBy(x => Vector3.SqrMagnitude(x.transform.position - transform.position)).FirstOrDefault().transform;
+    }
+
+    private bool IsInCameraView(Vector3 position)
+    {
+        var viewportPoint = mainCam.WorldToViewportPoint(position);
+        return viewportPoint.x is >=0 and <=1 && viewportPoint.y is >=0 and <=1;
+    }
+
+    private bool IsSomethingInBetween(Vector3 origin,Collider collider)
+    {
+        var rayDir = collider.transform.position - origin;
+        Physics.Raycast(origin, rayDir, out var hitInfo);
+        return hitInfo.collider != collider;
     }
 }
