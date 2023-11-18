@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        var motionSpeed = playerData.inputManager.IsSprinting ? sprintMoveSpeed : normalMoveSpeed;
+        var motionSpeed = playerData.inputManager.IsSprintingInput && playerData.playerStatsHandler.canUseStamina ? sprintMoveSpeed : normalMoveSpeed;
         _moveVector = _moveInput * motionSpeed;
         _moveVector.y = 0f;
 
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDodge()
     {
-        if (playerData.playerAnimationHandler.IsInteracting || playerData.playerAttackHandler.IsBetweenCombo) return;
+        if (playerData.playerAnimationHandler.IsInteracting || playerData.playerAttackHandler.IsBetweenCombo || !playerData.playerStatsHandler.canUseStamina) return;
         
         if (IsMoving())
         {
@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour
 
     private void Roll()
     {
+        playerData.playerStatsHandler.UseStamina(rollMoveInfo.staminaCost);
         MoveWithAnimation("Roll", true, rollMoveInfo, transform.forward, transform.forward);
     }
 

@@ -42,7 +42,7 @@ public class PlayerAnimationHandler : MonoBehaviour
     private void HandleMoveAnimation()
     {
         var motionFactor = playerData.playerController.IsMoving() ? 1f : 0f;
-        var sprintFactor = playerData.inputManager.IsSprinting ? 2f : 1f;
+        var sprintFactor = playerData.inputManager.IsSprintingInput && playerData.playerStatsHandler.canUseStamina ? 2f : 1f;
 
         var value = motionFactor * sprintFactor;
         animator.SetFloat(_motionBlendFactor, value, motionTransitionTime, Time.deltaTime);

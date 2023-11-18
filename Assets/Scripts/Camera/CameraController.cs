@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using Cinemachine;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -65,7 +63,6 @@ public class CameraController : MonoBehaviour
         
         if(colliders.Count == 0) return;
         //Find All Visible Targets
-        var cameraPosition = mainCam.transform.position;
         foreach (var collider in colliders.ToList())
         {
             if(IsInCameraView(collider.transform.position) && !IsSomethingInBetween(playerData.transform.position,collider)) continue;

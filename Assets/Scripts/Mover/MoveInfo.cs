@@ -8,6 +8,7 @@ public class MoveInfo
     [Header("Info"), Space] 
     [SerializeField] private AnimationCurve moveCurve;
     [SerializeField] private float moveSpeed = 1f;
+    public float staminaCost = 0f;
     
     public IEnumerator MoveRoutine(CharacterController characterController, Vector3 moveVector, Vector3 lookVector)
     {

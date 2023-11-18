@@ -3916,6 +3916,7 @@ GameObject:
   - component: {fileID: 1318895696984664673}
   - component: {fileID: 1318895696984664666}
   - component: {fileID: 1318895696984664678}
+  - component: {fileID: 2263688759417732957}
   - component: {fileID: 5234880620313551607}
   - component: {fileID: 1318895696984664677}
   - component: {fileID: 1318895696984664676}
@@ -3977,6 +3978,7 @@ MonoBehaviour:
   playerController: {fileID: 1318895696984664678}
   playerAttackHandler: {fileID: 5234880620313551607}
   playerAnimationHandler: {fileID: 1318895696984664677}
+  statsHandler: {fileID: 0}
   isLockedOn: 0
 --- !u!114 &1318895696984664678
 MonoBehaviour:
@@ -4068,6 +4070,25 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     moveSpeed: 1
+--- !u!114 &2263688759417732957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318895696984664675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb7f259718378c4999fb3ddafcad7e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats:
+  - type: 0
+    statData: {fileID: 11400000, guid: 6542056aa2b865642a9a89f1356a7acc, type: 2}
+    _doRegen: 0
+  - type: 1
+    statData: {fileID: 11400000, guid: d297f8c31cc3edc4eacb68cf7a089c16, type: 2}
+    _doRegen: 1
 --- !u!114 &5234880620313551607
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,12 +1,20 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    [Header("Components"), Space]
+    [Header("Components"), Space] 
     private Inputs _inputs;
 
+    [Header("Sprint And Dodge"), Space] 
+    [SerializeField] private float holdTimeToSprint = 0.5f;
+    private Coroutine _currentSprintAndDodgeCoroutine;
+    private bool _isCoroutineRunning = false;
+
     #region Events
+
+    public Action<bool> OnSprintingInputChange;
 
     public Action OnDodgeInput;
 
@@ -19,7 +27,7 @@ public class InputManager : MonoBehaviour
     #region Properties
 
     public Vector2 MoveInput { get; private set; }
-    public bool IsSprinting { get; private set; }
+    public bool IsSprintingInput { get; private set; }
 
     #endregion
 
@@ -44,10 +52,8 @@ public class InputManager : MonoBehaviour
         
         _inputs.Player.Walk.performed += context => HandleMoveInput(context.ReadValue<Vector2>());
         
-        _inputs.Player.Sprint.performed += context => HandleSprintInput(true);
-        _inputs.Player.Sprint.canceled += context => HandleSprintInput(false);
-
-        _inputs.Player.Roll.performed += context => HandleDodgeInput();
+        _inputs.Player.SprintAndDodge.started += context => HandleSprintAndDodgeInput(true);
+        _inputs.Player.SprintAndDodge.canceled += context => HandleSprintAndDodgeInput(false);
 
         _inputs.Player.Attack.performed += context => HandleAttackInput();
 
@@ -59,14 +65,46 @@ public class InputManager : MonoBehaviour
         MoveInput = rawInput;
     }
 
-    private void HandleSprintInput(bool state)
+    private void HandleSprintAndDodgeInput(bool state)
     {
-        IsSprinting = state;
+        if (state)
+        {
+            _currentSprintAndDodgeCoroutine = StartCoroutine(HandleSprintAndDodgeCoroutine());
+            return;
+        }
+
+        if (_isCoroutineRunning)
+        {
+            StopCoroutine(_currentSprintAndDodgeCoroutine);
+            OnDodgeInput?.Invoke();
+            _isCoroutineRunning = false;
+        }
+        else
+        {
+            IsSprintingInput = false;
+            OnSprintingInputChange?.Invoke(false);
+        }
     }
 
-    private void HandleDodgeInput()
+    private IEnumerator HandleSprintAndDodgeCoroutine()
     {
-        OnDodgeInput?.Invoke();
+        _isCoroutineRunning = true;
+        var timer = 0f;
+
+        while (timer < holdTimeToSprint)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        IsSprintingInput = true;
+        OnSprintingInputChange?.Invoke(true);
+        _isCoroutineRunning = false;
+    }
+
+    public void CancelSprintInput()
+    {
+        IsSprintingInput = false;
     }
 
     private void HandleAttackInput()

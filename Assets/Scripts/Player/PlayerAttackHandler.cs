@@ -41,6 +41,7 @@ public class PlayerAttackHandler : MonoBehaviour
         var playerAnimationHandler = playerData.playerAnimationHandler;
         
         if(playerAnimationHandler.IsInteracting) return;
+        if(!playerData.playerStatsHandler.canUseStamina) return;
         
         if (_isBetweenCombo)
         {
@@ -60,18 +61,15 @@ public class PlayerAttackHandler : MonoBehaviour
 
     private IEnumerator AttackRoutine()
     {
-        PlayComboAnimation(_comboIndex);
-        HandleComboMovement(_comboIndex);
-        HandleComboIndex();
+        DoAttack();
+        
         
         var timer = 0f;
         while (timer < continueComboWindow)
         {
             if (_continueCombo && playerData.playerAnimationHandler.CanAttack)
             {
-                PlayComboAnimation(_comboIndex);
-                HandleComboMovement(_comboIndex);
-                HandleComboIndex();
+                DoAttack();
 
                 _continueCombo = false;
                 timer = 0f;
@@ -83,6 +81,14 @@ public class PlayerAttackHandler : MonoBehaviour
         _comboIndex = 0;
         _isBetweenCombo = false;
         _continueCombo = false;
+    }
+
+    private void DoAttack()
+    {
+        PlayComboAnimation(_comboIndex);
+        HandleComboMovement(_comboIndex);
+        HandleComboStamina(_comboIndex);
+        HandleComboIndex();
     }
 
     private void HandleComboIndex()
@@ -105,6 +111,11 @@ public class PlayerAttackHandler : MonoBehaviour
     private void HandleComboMovement(int index)
     {
         playerData.playerController.HandleAttackMovement(comboData[index].moveInfo);
+    }
+
+    private void HandleComboStamina(int index)
+    {
+        playerData.playerStatsHandler.UseStamina(comboData[index].staminaCost);
     }
 
     #endregion

@@ -24,15 +24,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Roll",
-                    "type": "Value",
-                    "id": "aafca5db-0c56-4556-b0bc-2fc3798a95ea",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Tap(duration=0.2)",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "LockOn",
                     "type": "Value",
                     "id": "97a110e6-40dc-4433-a4db-824add723a7a",
@@ -42,12 +33,12 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Sprint",
+                    "name": "SprintAndDodge",
                     "type": "Value",
                     "id": "6634c6ca-5d66-42e1-8665-084964e4cda0",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold(pressPoint=0.2)",
+                    "interactions": "",
                     "initialStateCheck": true
                 },
                 {
@@ -134,18 +125,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Sprint",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "96063c67-6143-4d84-a629-61d64b96e8a7",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Roll",
+                    "action": "SprintAndDodge",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -46,15 +46,6 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Roll"",
-                    ""type"": ""Value"",
-                    ""id"": ""aafca5db-0c56-4556-b0bc-2fc3798a95ea"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Tap(duration=0.2)"",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""LockOn"",
                     ""type"": ""Value"",
                     ""id"": ""97a110e6-40dc-4433-a4db-824add723a7a"",
@@ -64,12 +55,12 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Sprint"",
+                    ""name"": ""SprintAndDodge"",
                     ""type"": ""Value"",
                     ""id"": ""6634c6ca-5d66-42e1-8665-084964e4cda0"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold(pressPoint=0.2)"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
@@ -156,18 +147,7 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Sprint"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""96063c67-6143-4d84-a629-61d64b96e8a7"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Roll"",
+                    ""action"": ""SprintAndDodge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -202,9 +182,8 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Walk = m_Player.FindAction("Walk", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-        m_Player_Roll = m_Player.FindAction("Roll", throwIfNotFound: true);
         m_Player_LockOn = m_Player.FindAction("LockOn", throwIfNotFound: true);
-        m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_SprintAndDodge = m_Player.FindAction("SprintAndDodge", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
     }
 
@@ -267,9 +246,8 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Walk;
     private readonly InputAction m_Player_Look;
-    private readonly InputAction m_Player_Roll;
     private readonly InputAction m_Player_LockOn;
-    private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_SprintAndDodge;
     private readonly InputAction m_Player_Attack;
     public struct PlayerActions
     {
@@ -277,9 +255,8 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
         public PlayerActions(@Inputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Walk => m_Wrapper.m_Player_Walk;
         public InputAction @Look => m_Wrapper.m_Player_Look;
-        public InputAction @Roll => m_Wrapper.m_Player_Roll;
         public InputAction @LockOn => m_Wrapper.m_Player_LockOn;
-        public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @SprintAndDodge => m_Wrapper.m_Player_SprintAndDodge;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -296,15 +273,12 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                 @Look.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
-                @Roll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
-                @Roll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
-                @Roll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRoll;
                 @LockOn.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLockOn;
                 @LockOn.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLockOn;
                 @LockOn.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLockOn;
-                @Sprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
-                @Sprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
-                @Sprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
+                @SprintAndDodge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprintAndDodge;
+                @SprintAndDodge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprintAndDodge;
+                @SprintAndDodge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprintAndDodge;
                 @Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
@@ -318,15 +292,12 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
-                @Roll.started += instance.OnRoll;
-                @Roll.performed += instance.OnRoll;
-                @Roll.canceled += instance.OnRoll;
                 @LockOn.started += instance.OnLockOn;
                 @LockOn.performed += instance.OnLockOn;
                 @LockOn.canceled += instance.OnLockOn;
-                @Sprint.started += instance.OnSprint;
-                @Sprint.performed += instance.OnSprint;
-                @Sprint.canceled += instance.OnSprint;
+                @SprintAndDodge.started += instance.OnSprintAndDodge;
+                @SprintAndDodge.performed += instance.OnSprintAndDodge;
+                @SprintAndDodge.canceled += instance.OnSprintAndDodge;
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
@@ -338,9 +309,8 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
     {
         void OnWalk(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnRoll(InputAction.CallbackContext context);
         void OnLockOn(InputAction.CallbackContext context);
-        void OnSprint(InputAction.CallbackContext context);
+        void OnSprintAndDodge(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
     }
 }
