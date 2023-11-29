@@ -48,5 +48,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     moveSpeed: 1
+    staminaCost: 40
+    minStaminaToPerform: 0
   damage: 0
-  staminaCost: 40

@@ -55,7 +55,6 @@ public class PlayerStatsHandler : MonoBehaviour
                 if (!_staminaStat.HaveStaminaToUse())
                 {
                     StaminaRegenDelay();
-                    playerData.inputManager.CancelSprintInput();
                 } 
                 break;
         }
@@ -83,14 +82,20 @@ public class PlayerStatsHandler : MonoBehaviour
         StaminaRegenDelay();
     }
 
+    public bool DoHaveMinStaminaToPerform(float minStaminaToPerform)
+    {
+        return _staminaStat.IsEqualOrHigherTo(minStaminaToPerform);
+    }
+
     //This is for adding delay between times we use stamina and we regen it
     private void StaminaRegenDelay()
     {
+        playerData.inputManager.CancelSprintInput();
         if (_staminaRegenDelayCoroutine != null)
         {
             StopCoroutine(_staminaRegenDelayCoroutine);
         }
-        _staminaRegenDelayCoroutine = StartCoroutine(_staminaStat.StaminaRegenDelayCoroutine());
+        _staminaRegenDelayCoroutine = StartCoroutine(_staminaStat.RegenDelayCoroutine());
     }
 
     private void HandleIsRunning(bool isRunning)
@@ -165,10 +170,9 @@ public class StaminaStat : Stat
 {
     [Header("Values"), Space] 
     [SerializeField] private float runningStaminaCost;
-    [SerializeField] private float minStaminaNeeded = 10f;
     
     [Header("State"), Space]
-    [SerializeField] private float staminaRegenDelayTime;
+    [SerializeField] private float regenDelayTime;
     public EnmStaminaUsageType staminaUsageType = EnmStaminaUsageType.Normal;
 
     public void HandleRunningStaminaCost()
@@ -178,14 +182,19 @@ public class StaminaStat : Stat
 
     public bool HaveStaminaToUse()
     {
-        return currentValue > minStaminaNeeded;
+        return currentValue > 0;
+    }
+
+    public bool IsEqualOrHigherTo(float value)
+    {
+        return value < currentValue;
     }
     
-    public IEnumerator StaminaRegenDelayCoroutine()
+    public IEnumerator RegenDelayCoroutine()
     {
         staminaUsageType = EnmStaminaUsageType.WithOutRegen;
         
-        yield return new WaitForSeconds(staminaRegenDelayTime);
+        yield return new WaitForSeconds(regenDelayTime);
 
         staminaUsageType = EnmStaminaUsageType.Normal;
     }

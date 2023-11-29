@@ -42,7 +42,8 @@ public class PlayerAttackHandler : MonoBehaviour
         
         if(playerAnimationHandler.IsInteracting) return;
         if(!playerData.playerStatsHandler.canUseStamina) return;
-        
+        // if(!playerData.playerStatsHandler.DoHaveMinStaminaToPerform(comboData[_comboIndex].moveInfo.MinStaminaToPerform)) return;
+
         if (_isBetweenCombo)
         {
             _continueCombo = true;
@@ -62,8 +63,7 @@ public class PlayerAttackHandler : MonoBehaviour
     private IEnumerator AttackRoutine()
     {
         DoAttack();
-        
-        
+
         var timer = 0f;
         while (timer < continueComboWindow)
         {
@@ -115,7 +115,7 @@ public class PlayerAttackHandler : MonoBehaviour
 
     private void HandleComboStamina(int index)
     {
-        playerData.playerStatsHandler.UseStamina(comboData[index].staminaCost);
+        playerData.playerStatsHandler.UseStamina(comboData[index].moveInfo.StaminaCost);
     }
 
     #endregion

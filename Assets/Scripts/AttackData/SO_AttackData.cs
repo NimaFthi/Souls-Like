@@ -9,6 +9,5 @@ public class SO_AttackData : ScriptableObject
 
     [Header("StatData"), Space] 
     public float damage;
-    public float staminaCost;
     //We can add other custom data to this part later
 }

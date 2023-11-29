@@ -137,7 +137,8 @@ public class PlayerController : MonoBehaviour
 
     private void Roll()
     {
-        playerData.playerStatsHandler.UseStamina(rollMoveInfo.staminaCost);
+        if(!playerData.playerStatsHandler.DoHaveMinStaminaToPerform(rollMoveInfo.MinStaminaToPerform)) return;
+        playerData.playerStatsHandler.UseStamina(rollMoveInfo.StaminaCost);
         MoveWithAnimation("Roll", true, rollMoveInfo, transform.forward, transform.forward);
     }
 
